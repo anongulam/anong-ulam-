@@ -1,0 +1,91 @@
+tml>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Should I Eat?</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 { color: #333; margin-bottom: 8px; }
+        p { color: #666; margin-bottom: 30px; }
+        #result {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff4757;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            border: 2px dashed #ffeaa7;
+            border-radius: 8px;
+            background: #fffdf6;
+        }
+        button {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            width: 100%;
+        }
+        button:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>What's for Dinner?</h1>
+    <p>Stop overthinking. Let the machine decide.</p>
+    <div id="result">Click Spin!</div>
+    <button onclick="decideFood()">Spin the Wheel</button>
+</div>
+
+<script>
+    const foodChoices = [
+        "🍕 Pizza Night", "🍔 Juicy Burgers", "🍜 Ramen / Noodles", 
+        "🌮 Tacos / Burritos", "🍗 Fried Chicken", "🍣 Sushi / Japanese", 
+        "🥗 Healthy Salad", "🥩 Sizzling Steak", "🍝 Home-cooked Pasta"
+    ];
+
+    function decideFood() {
+        const resultDiv = document.getElementById("result");
+        const button = document.querySelector("button");
+        button.disabled = true;
+        
+        let counter = 0;
+        // This simulates a spinning wheel slot-machine effect
+        const interval = setInterval(() => {
+            const tempRandom = foodChoices[Math.floor(Math.random() * foodChoices.length)];
+            resultDiv.innerText = tempRandom;
+            counter++;
+            
+            if (counter > 15) {
+                clearInterval(interval);
+                const finalChoice = foodChoices[Math.floor(Math.random() * foodChoices.length)];
+                resultDiv.innerText = finalChoice;
+                button.disabled = false;
+            }
+        }, 80);
+    }
