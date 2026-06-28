@@ -59,7 +59,7 @@
     <h1>What's for Dinner?</h1>
     <p>Stop overthinking. Let the machine decide.</p>
     <div id="result">Click Spin!</div>
-    <button onclick="decideFood()">Spin the Wheel</button>
+    <button id="spinBtn">Spin the Wheel</button>
 </div>
 
 <script>
@@ -69,13 +69,15 @@
         "🥗 Healthy Salad", "🥩 Sizzling Steak", "🍝 Home-cooked Pasta"
     ];
 
-    function decideFood() {
-        const resultDiv = document.getElementById("result");
-        const button = document.querySelector("button");
+    // Select the elements from the document
+    const resultDiv = document.getElementById("result");
+    const button = document.getElementById("spinBtn");
+
+    // Connect the click action safely via JavaScript
+    button.addEventListener("click", () => {
         button.disabled = true;
-        
         let counter = 0;
-        // This simulates a spinning wheel slot-machine effect
+        
         const interval = setInterval(() => {
             const tempRandom = foodChoices[Math.floor(Math.random() * foodChoices.length)];
             resultDiv.innerText = tempRandom;
@@ -88,7 +90,7 @@
                 button.disabled = false;
             }
         }, 80);
-    }
+    });
 </script>
 
 </body>
