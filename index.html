@@ -26,10 +26,10 @@
         h1 { color: #333; margin-bottom: 8px; }
         p { color: #666; margin-bottom: 30px; }
         #result {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: #ff4757;
-            height: 60px;
+            height: 70px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -37,6 +37,7 @@
             border: 2px dashed #ffeaa7;
             border-radius: 8px;
             background: #fffdf6;
+            padding: 0 10px;
         }
         button {
             background-color: #ff4757;
@@ -63,81 +64,30 @@
 </div>
 
 <script>
+    // Your exact custom 17-dish menu list
     const foodChoices = [
-        // 1 - 30 (Previous Items)
-        "🥣 Sinigang na Baboy", "🥩 Beef Steak", "🍗 Chicken Fingers", "🍳 Corned Beef", "🍟 Fried Chicken", 
-        "🐟 Baked Salmon", "🐟 Fried Tilapia", "🍔 Angel's Burger", "🥩 Premium Steak", "🍝 Spaghetti",
-        "🍗 Pork Adobo", "🥘 Chicken Afritada", "🍲 Pork Menudo", "🍛 Kare-Kare", "🔥 Sizzling Sisig", 
-        "🥣 Sinigang na Hipon", "🍲 Lechon Kawali", "🍢 Pork BBQ", "🥣 Chicken Tinola", "🥞 Tortang Talong",
-        "🍛 Bicol Express", "🥬 Pinakbet", "🍜 Pancit Canton", "🧆 Shanghai Lumpia", "🍲 Bulalo", 
-        "🐷 Crispy Pata", "🍛 Ginataang Kalabasa", "🍲 Dinuguan", "🥘 Caldereta", "🐟 Paksiw na Bangus",
-
-        // 31 - 50 (Previous Items)
-        "🍳 Beef Tapsilog", "🐷 Pork Tocilog", "🌭 Longganisa", "🍲 Pork Adobo sa Gata", "🥘 Chicken Pastel", 
-        "🍲 Mechado", "🍛 Inihaw na Liempo", "🥣 Arroz Caldo", "🥣 Goto", "🥢 Tokwa't Baboy", 
-        "🍜 Pancit Malabon", "🍜 Pancit Bihon", "🥘 Ginisang Munggo", "🍆 Ginisang Ampalaya", "🥟 Lumpiang Sariwa", 
-        "🐟 Inihaw na Bangus", "🍗 Chicken Inasal", "🥘 Laing", "🥓 Lechon Paksiw", "🍛 Chopsuey",
-
-        // 51 - 75 (New Additions)
-        "🐷 Pork Estofado",
+        "🧀 Cordon Bleu",
+        "🌯 Burrito",
+        "🍲 Igado",
+        "🍲 Menudo",
+        "🥣 Sinigang",
+        "🍗 Adobong Baboy",
+        "🥦 Beef Broccoli",
+        "🥘 Chicken Pastel",
         "🥘 Chicken Curry",
-        "🍲 Hamonado",
-        "🥣 Sinampalukang Manok",
-        "🥩 Beef Pares",
-        "🍲 Beef Laya",
-        "🍲 Papaitan",
-        "🍲 Pochero",
-        "🥘 Embutido",
-        "🧆 Hardinera",
-        "🍢 Inihaw na Isaw",
-        "🥚 Kwek-Kwek / Tokneneng",
-        "🍢 Fishballs / Squidballs",
-        "🥟 Lumpiang Togue",
-        "🥞 Ukoy (Shrimp Fritters)",
-        "🍤 Camaron Rebosado",
-        "🐟 Daing na Bangus",
-        "🦑 Adobong Pusit",
-        "🔥 Sizzling Gambas",
-        "🦑 Crispy Calamares",
-        "🥬 Gising-Gising",
-        "🥗 Ensaladang Talong",
-        "🍳 Bangsilog",
-        "🍳 Spamsilog",
-        "🍳 Chiksilog",
-
-        // 76 - 100 (New Additions & Merienda/Dessert Options)
-        "🍳 Hotdogsilog",
-        "🍔 Burger Steak",
-        "🥪 Cheesy Ham Sandwich",
-        "🍲 Sopas",
-        "🥣 Misua Patola Soup",
-        "🥣 Odong Noodles",
-        "🍜 Pancit Palabok",
-        "🍜 Pancit Habhab",
-        "🍜 Lomi",
-        "🥣 Batchoy",
-        "🍛 Lechon Manok",
-        "🐖 Liempo Turon",
-        "🍌 Fried Banana Cue",
-        "🍠 Camote Cue",
-        "🥞 Maruya",
-        "🥖 Turon con Kasuy",
-        "🍧 Halo-Halo",
-        "🍮 Leche Flan",
-        "🪵 Puto Bumbong",
-        "🥥 Bibingka",
-        "🌽 Maja Blanca",
-        "🥣 Ginataang Bilo-Bilo",
-        "🥣 Champorado",
-        "🥭 Mango Float",
-        "🥗 Buko Pandan Salad"
+        "🥘 Beef Caldereta",
+        "🍝 Spaghetti",
+        "🥘 Munggo",
+        "🦑 Pusit Ginataan",
+        "🍛 Bicol Express",
+        "🐷 Binagoongan",
+        "🍛 Chop Suey",
+        "🍛 Kare Kare"
     ];
 
-    // Select the elements from the document
     const resultDiv = document.getElementById("result");
     const button = document.getElementById("spinBtn");
 
-    // Connect the click action safely via JavaScript
     button.addEventListener("click", () => {
         button.disabled = true;
         let counter = 0;
