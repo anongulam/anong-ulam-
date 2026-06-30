@@ -26,10 +26,10 @@
         h1 { color: #333; margin-bottom: 8px; }
         p { color: #666; margin-bottom: 30px; }
         #result {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: bold;
             color: #ff4757;
-            height: 70px;
+            height: 80px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -37,7 +37,7 @@
             border: 2px dashed #ffeaa7;
             border-radius: 8px;
             background: #fffdf6;
-            padding: 0 10px;
+            padding: 0 15px;
         }
         button {
             background-color: #ff4757;
@@ -64,25 +64,73 @@
 </div>
 
 <script>
-    // Your exact custom 17-dish menu list
+    // Updated food list based on your complete selection
     const foodChoices = [
-        "🧀 Cordon Bleu",
-        "🌯 Burrito",
+        // Pork
+        "🥩 Pork steak",
+        "🥣 Sinigang na baboy",
+        "🍗 Adobong puti",
+        "🍗 Adobong baboy",
+        "🥥 Adobo sa gata",
         "🍲 Igado",
-        "🍲 Menudo",
-        "🥣 Sinigang",
-        "🍗 Adobong Baboy",
-        "🥦 Beef Broccoli",
-        "🥘 Chicken Pastel",
-        "🥘 Chicken Curry",
+        "🧆 Stir fry Pork ribs",
+        "🍖 Baby back ribs",
+        "🥘 Kare kare lechon kawali",
+        "🥩 Breaded Porkchop",
+        "🧆 Tokwat baboy",
+        "🍛 Bicol express",
+        "🥩 Tapang taal",
+
+        // Beef
+        "🥩 Beef steak",
+        "🥩 Ribeye Steak",
+        "🥘 Kare kare balat/tuwalya",
         "🥘 Beef Caldereta",
-        "🍝 Spaghetti",
+        "🥦 Beef broccoli",
+        "🔥 Beef Bulgogi",
+        "🥩 Beef Tapa",
+        "🍳 Burger steak",
+        "🍜 La paz batchoy",
+
+        // Chicken
+        "🍲 Tinola",
+        "🍌 Chicken pastil",
+        "🍗 Fried chicken",
+        "🥩 Chicken Fillet",
+        "🍍 Pininyahang manok",
+        "🥘 Chicken curry",
+        "🍗 Karaage",
+
+        // Seafood
+        "🥣 Sinigang na salmon",
+        "🐟 Baked Salmon",
+        "🐟 Fried Tilapia",
+        "🦑 Adobo Pusit",
+        "🍤 Buttered shrimp",
+        "🦀 Alimango",
+        "🐟 GG small",
+        "🐟 Tuna panga",
+        "🐟 Tuna belly",
+
+        // Vegetables & Sides
         "🥘 Munggo",
-        "🦑 Pusit Ginataan",
-        "🍛 Bicol Express",
-        "🐷 Binagoongan",
-        "🍛 Chop Suey",
-        "🍛 Kare Kare"
+        "🌱 Toge",
+        "🥗 Cabbage carrots with egg",
+        "🍛 Chop suey",
+        "🥒 Ampalaya",
+        "🍳 Tortang talong",
+        "🌱 Adobong sitaw",
+        "🥔 Mashed potato",
+
+        // Breakfast & Canned Goods
+        "🥫 Corned beef",
+        "🥓 Tocino",
+        "🥓 Bacon",
+        "🌭 Hotdog",
+        "🌭 Dali sausage",
+        "🥫 Rose bowl sardines",
+        "🥫 Century tuna",
+        "🥫 Spanish sardines"
     ];
 
     const resultDiv = document.getElementById("result");
