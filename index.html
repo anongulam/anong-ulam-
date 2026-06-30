@@ -1,159 +1,229 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What Should I Eat?</title>
+content="width=device-width, initial-scale=1.0">
+    <title>Anong Ulam Natin? — The Ultimate Food Decider</title>
     <style>
+        :root {
+            --primary: #ff4757;
+            --primary-hover: #e84118;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --text-main: #2f3542;
+            --text-muted: #747d8c;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f7f9fa;
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
+
         .container {
             text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            max-width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 
+                        0 1px 3px rgba(0, 0, 0, 0.04);
+            max-width: 440px;
             width: 100%;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
         }
-        h1 { color: #333; margin-bottom: 8px; }
-        p { color: #666; margin-bottom: 30px; }
-        #result {
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: #ff4757;
-            height: 80px;
+
+        header h1 {
+            color: var(--text-main);
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0 0 35px 0;
+            line-height: 1.5;
+        }
+
+        /* Premium Result Card */
+        .display-card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 18px;
+            height: 120px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             margin-bottom: 30px;
-            border: 2px dashed #ffeaa7;
-            border-radius: 8px;
-            background: #fffdf6;
-            padding: 0 15px;
+            padding: 10px 20px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02), 
+                        0 10px 20px rgba(255, 71, 87, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+
+        .display-card.rolling {
+            border-color: rgba(255, 71, 87, 0.3);
+            background: #fffafb;
+            transform: scale(0.98);
+        }
+
+        .display-card.success {
+            border-color: #2ed573;
+            background: #f1fcf4;
+            transform: scale(1.03);
+            box-shadow: 0 15px 30px rgba(46, 213, 115, 0.15);
+        }
+
+        #label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        #result {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            transition: color 0.2s ease;
+            text-align: center;
+        }
+
+        .success #result {
+            color: #1e7e34;
+        }
+
+        /* Modern CTA Button */
         button {
-            background-color: #ff4757;
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 16px 40px;
             font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 30px;
+            font-weight: 700;
+            border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.1s;
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
+            transition: all 0.2s ease;
             width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
-        button:active { transform: scale(0.98); }
+
+        button:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(255, 71, 87, 0.4);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+        }
+
+        button:disabled {
+            background-color: #ced6e0;
+            color: #a4b0be;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Footer styling for extra legitimacy */
+        .footer {
+            margin-top: 25px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Anong ulam natin?</h1>
-    <p>Nahihirapan ka ba mag isip ng ulam? click na!</p>
-    <div id="result">Sagot ko na ulam mo..</div>
-    <button id="spinBtn">Click here!</button>
+    <header>
+        <h1>Anong ulam natin?</h1>
+        <p>Nahihirapan ka ba mag-isip ng ulam? Hayaan mong ang tadhana ang pumili para sa'yo.</p>
+    </header>
+
+    <div class="display-card" id="card">
+        <div id="label">Suggested Dish</div>
+        <div id="result">Pindutin ang button sa ibaba...</div>
+    </div>
+
+    <button id="spinBtn">
+        <span>Mag-isip ng Ulam</span>
+    </button>
+    
+    <div class="footer">Version 2.0 • Made for Hungry People</div>
 </div>
 
 <script>
-    // Updated food list based on your complete selection
     const foodChoices = [
         // Pork
-        "🥩 Pork steak",
-        "🥣 Sinigang na baboy",
-        "🍗 Adobong puti",
-        "🍗 Adobong baboy",
-        "🥥 Adobo sa gata",
-        "🍲 Igado",
-        "🧆 Stir fry Pork ribs",
-        "🍖 Baby back ribs",
-        "🥘 Kare kare lechon kawali",
-        "🥩 Breaded Porkchop",
-        "🧆 Tokwat baboy",
-        "🍛 Bicol express",
-        "🥩 Tapang taal",
-
+        "🥩 Pork steak", "🥣 Sinigang na baboy", "🍗 Adobong puti", "🍗 Adobong baboy", 
+        "🥥 Adobo sa gata", "🍲 Igado", "🧆 Stir fry Pork ribs", "🍖 Baby back ribs", 
+        "🥘 Kare kare lechon kawali", "🥩 Breaded Porkchop", "🧆 Tokwat baboy", 
+        "🍛 Bicol express", "🥩 Tapang taal",
         // Beef
-        "🥩 Beef steak",
-        "🥩 Ribeye Steak",
-        "🥘 Kare kare balat/tuwalya",
-        "🥘 Beef Caldereta",
-        "🥦 Beef broccoli",
-        "🔥 Beef Bulgogi",
-        "🥩 Beef Tapa",
-        "🍳 Burger steak",
-        "🍜 La paz batchoy",
-
+        "🥩 Beef steak", "🥩 Ribeye Steak", "🥘 Kare kare balat/tuwalya", "🥘 Beef Caldereta", 
+        "🥦 Beef broccoli", "🔥 Beef Bulgogi", "🥩 Beef Tapa", "🍳 Burger steak", "🍜 La paz batchoy",
         // Chicken
-        "🍲 Tinola",
-        "🍌 Chicken pastil",
-        "🍗 Fried chicken",
-        "🥩 Chicken Fillet",
-        "🍍 Pininyahang manok",
-        "🥘 Chicken curry",
-        "🍗 Karaage",
-
+        "🍲 Tinola", "🍌 Chicken pastil", "🍗 Fried chicken", "🥩 Chicken Fillet", 
+        "🍍 Pininyahang manok", "🥘 Chicken curry", "🍗 Karaage",
         // Seafood
-        "🥣 Sinigang na salmon",
-        "🐟 Baked Salmon",
-        "🐟 Fried Tilapia",
-        "🦑 Adobo Pusit",
-        "🍤 Buttered shrimp",
-        "🦀 Alimango",
-        "🐟 GG small",
-        "🐟 Tuna panga",
-        "🐟 Tuna belly",
-
-        // Vegetables & Sides
-        "🥘 Munggo",
-        "🌱 Toge",
-        "🥗 Cabbage carrots with egg",
-        "🍛 Chop suey",
-        "🥒 Ampalaya",
-        "🍳 Tortang talong",
-        "🌱 Adobong sitaw",
-        "🥔 Mashed potato",
-
-        // Breakfast & Canned Goods
-        "🥫 Corned beef",
-        "🥓 Tocino",
-        "🥓 Bacon",
-        "🌭 Hotdog",
-        "🌭 Dali sausage",
-        "🥫 Rose bowl sardines",
-        "🥫 Century tuna",
-        "🥫 Spanish sardines"
+        "🥣 Sinigang na salmon", "🐟 Baked Salmon", "🐟 Fried Tilapia", "🦑 Adobo Pusit", 
+        "🍤 Buttered shrimp", "🦀 Alimango", "🐟 GG small", "🐟 Tuna panga", "🐟 Tuna belly",
+        // Vegetables
+        "🥘 Munggo", "🌱 Toge", "🥗 Cabbage carrots with egg", "🍛 Chop suey", 
+        "🥒 Ampalaya", "🍳 Tortang talong", "🌱 Adobong sitaw", "🥔 Mashed potato",
+        // Breakfast/Canned
+        "🥫 Corned beef", "🥓 Tocino", "🥓 Bacon", "🌭 Hotdog", "🌭 Dali sausage", 
+        "🥫 Rose bowl sardines", "🥫 Century tuna", "🥫 Spanish sardines"
     ];
 
     const resultDiv = document.getElementById("result");
+    const cardDiv = document.getElementById("card");
     const button = document.getElementById("spinBtn");
+    const labelDiv = document.getElementById("label");
 
     button.addEventListener("click", () => {
+        // Reset states
         button.disabled = true;
+        cardDiv.classList.remove("success");
+        cardDiv.classList.add("rolling");
+        labelDiv.innerText = "Choosing your meal...";
+        
         let counter = 0;
+        let speed = 60; // Smooth initial rolling speed
         
         const interval = setInterval(() => {
             const tempRandom = foodChoices[Math.floor(Math.random() * foodChoices.length)];
             resultDiv.innerText = tempRandom;
             counter++;
             
-            if (counter > 15) {
+            if (counter > 18) {
                 clearInterval(interval);
+                
+                // Final selection
                 const finalChoice = foodChoices[Math.floor(Math.random() * foodChoices.length)];
                 resultDiv.innerText = finalChoice;
+                
+                // Trigger success visual state
+                cardDiv.classList.remove("rolling");
+                cardDiv.classList.add("success");
+                labelDiv.innerText = "Your Dish Today! 🎉";
+                
                 button.disabled = false;
             }
-        }, 80);
-    });
-</script>
-
-</body>
-</html>
