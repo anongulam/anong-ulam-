@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<header>
-   <div class="logo-container">
-    <img src="logo.png" alt="Anong Ulam Natin Logo" class="app-logo">
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anong Ulam Natin?</title>
+    <style>
+        /* CSS Variables - Defined for colors used throughout the app */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --primary: #ff4757;
+            --primary-hover: #ff6b81;
         }
 
         body {
@@ -16,6 +24,16 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .app-logo {
+            max-width: 120px;
+            height: auto;
         }
 
         .container {
@@ -149,6 +167,10 @@
 <body>
 
 <div class="container">
+    <div class="logo-container">
+        <img src="logo.png" alt="Anong Ulam Natin Logo" class="app-logo" onerror="this.style.display='none'">
+    </div>
+
     <header>
         <h1>Anong ulam natin?</h1>
         <p>Nahihirapan ka ba mag-isip ng ulam? Ako pipili para sa'yo.</p>
