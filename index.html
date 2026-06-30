@@ -11,8 +11,10 @@
             --bg-gradient: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('logo.png');
             --text-main: #2d3436;
             --text-muted: #636e72;
-            --primary: #ff4757;
-            --primary-hover: #ff6b81;
+            /* Changed primary button colors to a vibrant food-friendly green */
+            --primary: #2ed573;
+            --primary-hover: #26af5f;
+            --accent-pink: #ff4757;
         }
 
         body {
@@ -65,8 +67,59 @@
         header p {
             color: var(--text-muted);
             font-size: 0.95rem;
-            margin: 0 0 35px 0;
+            margin: 0 0 25px 0;
             line-height: 1.5;
+        }
+
+        /* --- Category Filter Section --- */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 25px;
+            background: #f1f2f6;
+            padding: 6px;
+            border-radius: 16px;
+        }
+
+        .filter-option {
+            flex: 1 1 calc(33.33% - 8px);
+            min-width: 80px;
+            position: relative;
+        }
+
+        .filter-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .filter-option label {
+            display: block;
+            padding: 10px 4px;
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .filter-option input[type="radio"]:checked + label {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Disable filters while rolling */
+        .filter-container.disabled {
+            opacity: 0.6;
+            pointer-events: none;
         }
 
         /* Premium Result Card */
@@ -82,15 +135,15 @@
             margin-bottom: 30px;
             padding: 10px 20px;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.02), 
-                        0 10px 20px rgba(255, 71, 87, 0.05);
+                        0 10px 20px rgba(46, 213, 115, 0.05);
             position: relative;
             overflow: hidden;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .display-card.rolling {
-            border-color: rgba(255, 71, 87, 0.3);
-            background: #fffafb;
+            border-color: rgba(46, 213, 115, 0.3);
+            background: #fbfdfc;
             transform: scale(0.98);
         }
 
@@ -132,7 +185,7 @@
             font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
+            box-shadow: 0 8px 20px rgba(46, 213, 115, 0.3);
             transition: all 0.2s ease;
             width: 100%;
             display: flex;
@@ -144,12 +197,12 @@
         button:hover:not(:disabled) {
             background-color: var(--primary-hover);
             transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(255, 71, 87, 0.4);
+            box-shadow: 0 12px 25px rgba(46, 213, 115, 0.4);
         }
 
         button:active:not(:disabled) {
             transform: translateY(1px);
-            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+            box-shadow: 0 4px 10px rgba(46, 213, 115, 0.3);
         }
 
         button:disabled {
@@ -181,6 +234,33 @@
         <p>Nahihirapan ka ba mag-isip ng ulam? Ako pipili para sa'yo.</p>
     </header>
 
+    <div class="filter-container" id="filterContainer">
+        <div class="filter-option">
+            <input type="radio" id="all" name="category" value="all" checked>
+            <label for="all">All</label>
+        </div>
+        <div class="filter-option">
+            <input type="radio" id="pork" name="category" value="pork">
+            <label for="pork">Pork</label>
+        </div>
+        <div class="filter-option">
+            <input type="radio" id="beef" name="category" value="beef">
+            <label id="beefLabel" for="beef">Beef</label>
+        </div>
+        <div class="filter-option">
+            <input type="radio" id="chicken" name="category" value="chicken">
+            <label for="chicken">Chicken</label>
+        </div>
+        <div class="filter-option">
+            <input type="radio" id="seafood" name="category" value="seafood">
+            <label for="seafood">Seafood</label>
+        </div>
+        <div class="filter-option">
+            <input type="radio" id="veg" name="category" value="veg">
+            <label for="veg">Veggie</label>
+        </div>
+    </div>
+
     <div class="display-card" id="card">
         <div id="label">Suggested Dish</div>
         <div id="result">hmmm?</div>
@@ -194,37 +274,88 @@
 </div>
 
 <script>
+    // Food choices structured with category mappings
     const foodChoices = [
         // Pork
-        "🥩 Pork steak", "🥣 Sinigang na baboy", "🍗 Adobong puti", "🍗 Adobong baboy", 
-        "🥥 Adobo sa gata", "🍲 Igado", "🧆 Stir fry Pork ribs", "🍖 Baby back ribs", 
-        "🥘 Kare kare lechon kawali", "🥩 Breaded Porkchop", "🧆 Tokwat baboy", 
-        "🍛 Bicol express", "🥩 Tapang taal",
+        { name: "🥩 Pork steak", category: "pork" },
+        { name: "🥣 Sinigang na baboy", category: "pork" },
+        { name: "🍗 Adobong puti", category: "pork" },
+        { name: "🍗 Adobong baboy", category: "pork" }, 
+        { name: "🥥 Adobo sa gata", category: "pork" },
+        { name: "🍲 Igado", category: "pork" },
+        { name: "🧆 Stir fry Pork ribs", category: "pork" },
+        { name: "🍖 Baby back ribs", category: "pork" }, 
+        { name: "🥘 Kare kare lechon kawali", category: "pork" },
+        { name: "🥩 Breaded Porkchop", category: "pork" },
+        { name: "🧆 Tokwat baboy", category: "pork" }, 
+        { name: "🍛 Bicol express", category: "pork" },
+        { name: "🥩 Tapang taal", category: "pork" },
         // Beef
-        "🥩 Beef steak", "🥩 Ribeye Steak", "🥘 Kare kare balat/tuwalya", "🥘 Beef Caldereta", 
-        "🥦 Beef broccoli", "🔥 Beef Bulgogi", "🥩 Beef Tapa", "🍳 Burger steak", "🍜 La paz batchoy",
+        { name: "🥩 Beef steak", category: "beef" },
+        { name: "🥩 Ribeye Steak", category: "beef" },
+        { name: "🥘 Kare kare balat/tuwalya", category: "beef" },
+        { name: "🥘 Beef Caldereta", category: "beef" }, 
+        { name: "🥦 Beef broccoli", category: "beef" },
+        { name: "🔥 Beef Bulgogi", category: "beef" },
+        { name: "🥩 Beef Tapa", category: "beef" },
+        { name: "🍳 Burger steak", category: "beef" },
+        { name: "🍜 La paz batchoy", category: "beef" },
         // Chicken
-        "🍲 Tinola", "🍌 Chicken pastil", "🍗 Fried chicken", "🥩 Chicken Fillet", 
-        "🍍 Pininyahang manok", "🥘 Chicken curry", "🍗 Karaage",
+        { name: "🍲 Tinola", category: "chicken" },
+        { name: "🍌 Chicken pastil", category: "chicken" },
+        { name: "🍗 Fried chicken", category: "chicken" },
+        { name: "🥩 Chicken Fillet", category: "chicken" }, 
+        { name: "🍍 Pininyahang manok", category: "chicken" },
+        { name: "🥘 Chicken curry", category: "chicken" },
+        { name: "🍗 Karaage", category: "chicken" },
         // Seafood
-        "🥣 Sinigang na salmon", "🐟 Baked Salmon", "🐟 Fried Tilapia", "🦑 Adobo Pusit", 
-        "🍤 Buttered shrimp", "🦀 Alimango", "🐟 GG small", "🐟 Tuna panga", "🐟 Tuna belly",
+        { name: "🥣 Sinigang na salmon", category: "seafood" },
+        { name: "🐟 Baked Salmon", category: "seafood" },
+        { name: "🐟 Fried Tilapia", category: "seafood" },
+        { name: "🦑 Adobo Pusit", category: "seafood" }, 
+        { name: "🍤 Buttered shrimp", category: "seafood" },
+        { name: "🦀 Alimango", category: "seafood" },
+        { name: "🐟 GG small", category: "seafood" },
+        { name: "🐟 Tuna panga", category: "seafood" },
+        { name: "🐟 Tuna belly", category: "seafood" },
         // Vegetables
-        "🥘 Munggo", "🌱 Toge", "🥗 Cabbage carrots with egg", "🍛 Chop suey", 
-        "🥒 Ampalaya", "🍳 Tortang talong", "🌱 Adobong sitaw", "🥔 Mashed potato",
+        { name: "🥘 Munggo", category: "veg" },
+        { name: "🌱 Toge", category: "veg" },
+        { name: "🥗 Cabbage carrots with egg", category: "veg" },
+        { name: "🍛 Chop suey", category: "veg" }, 
+        { name: "🥒 Ampalaya", category: "veg" },
+        { name: "🍳 Tortang talong", category: "veg" },
+        { name: "🌱 Adobong sitaw", category: "veg" },
+        { name: "🥔 Mashed potato", category: "veg" },
         // Breakfast/Canned
-        "🥫 Corned beef", "🥓 Tocino", "🥓 Bacon", "🌭 Hotdog", "🌭 Dali sausage", 
-        "🥫 Rose bowl sardines", "🥫 Century tuna", "🥫 Spanish sardines"
+        { name: "🥫 Corned beef", category: "beef" },
+        { name: "🥓 Tocino", category: "pork" },
+        { name: "🥓 Bacon", category: "pork" },
+        { name: "🌭 Hotdog", category: "pork" },
+        { name: "🌭 Dali sausage", category: "pork" }, 
+        { name: "🥫 Rose bowl sardines", category: "seafood" },
+        { name: "🥫 Century tuna", category: "seafood" },
+        { name: "🥫 Spanish sardines", category: "seafood" }
     ];
 
     const resultDiv = document.getElementById("result");
     const cardDiv = document.getElementById("card");
     const button = document.getElementById("spinBtn");
     const labelDiv = document.getElementById("label");
+    const filterContainer = document.getElementById("filterContainer");
 
     button.addEventListener("click", () => {
+        // Get currently selected filter category
+        const selectedCategory = document.querySelector('input[name="category"]:checked').value;
+
+        // Filter dishes accordingly
+        const filteredChoices = selectedCategory === "all" 
+            ? foodChoices 
+            : foodChoices.filter(item => item.category === selectedCategory);
+
         // Reset states
         button.disabled = true;
+        filterContainer.classList.add("disabled"); // Lock filters during execution
         cardDiv.classList.remove("success");
         cardDiv.classList.add("rolling");
         labelDiv.innerText = "Choosing your meal...";
@@ -233,7 +364,7 @@
         let speed = 60; // Smooth initial rolling speed
         
         const interval = setInterval(() => {
-            const tempRandom = foodChoices[Math.floor(Math.random() * foodChoices.length)];
+            const tempRandom = filteredChoices[Math.floor(Math.random() * filteredChoices.length)].name;
             resultDiv.innerText = tempRandom;
             counter++;
             
@@ -241,7 +372,7 @@
                 clearInterval(interval);
                 
                 // Final selection
-                const finalChoice = foodChoices[Math.floor(Math.random() * foodChoices.length)];
+                const finalChoice = filteredChoices[Math.floor(Math.random() * filteredChoices.length)].name;
                 resultDiv.innerText = finalChoice;
                 
                 // Trigger success visual state
@@ -250,6 +381,7 @@
                 labelDiv.innerText = "Your Dish Today! 🎉";
                 
                 button.disabled = false;
+                filterContainer.classList.remove("disabled"); // Re-enable filters
             }
         }, speed);
     });
